@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { apiGet } from "@/lib/api";
+import { env } from "@/lib/env";
 import { contractReads } from "@/lib/contract";
 import type { BackendClaim, Claim } from "@/lib/types";
 import { mapBackendClaim } from "@/lib/types";
@@ -35,41 +36,41 @@ const POLL_INTERVAL_MS = 8_000;
 export default function HuntBoardPage() {
   const [claims, setClaims] = useState<Claim[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const chainReconciled = useRef(false);
 
   const load = useCallback(async () => {
     try {
-      const rows = await apiGet<BackendClaim[]>("/api/v1/claims?limit=50");
-      const cached = rows.map(mapBackendClaim);
-      setClaims((prev) => mergeClaims(cached, prev));
-      setError(null);
-
-      if (!chainReconciled.current) {
-        chainReconciled.current = true;
-        reconcileWithChain(cached).catch(() => {
-          // Best-effort only — if this fails, the claim still appears once
-          // the indexer's next cycle runs. Never surface this as a page error.
-        });
+      let cached: Claim[] = [];
+      if (env.apiBaseUrl) {
+        try {
+          const rows = await apiGet<BackendClaim[]>("/api/v1/claims?limit=50");
+          cached = rows.map(mapBackendClaim);
+          setClaims((prev) => mergeClaims(cached, prev));
+        } catch {
+          // Backend cache is not reachable or not running — fall back to contract
+        }
       }
+
+      // Reconcile with or load directly from contract
+      const totalCount = await contractReads.getClaimCount();
+      const cachedIds = new Set(cached.map((c) => c.id));
+      const missingIds: string[] = [];
+      for (let id = totalCount; id >= 1; id--) {
+        const idStr = String(id);
+        if (!cachedIds.has(idStr)) missingIds.push(idStr);
+      }
+
+      if (missingIds.length > 0) {
+        const fetched = await Promise.all(
+          missingIds.map((id) => contractReads.getClaim(id) as Promise<Claim>),
+        );
+        setClaims((prev) => mergeClaims(fetched, prev));
+      } else if (cached.length === 0) {
+        setClaims([]);
+      }
+      setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load claims");
     }
-  }, []);
-
-  const reconcileWithChain = useCallback(async (cached: Claim[]) => {
-    const totalCount = await contractReads.getClaimCount();
-    const cachedIds = new Set(cached.map((c) => c.id));
-    const missingIds: string[] = [];
-    for (let id = totalCount; id >= 1; id--) {
-      const idStr = String(id);
-      if (!cachedIds.has(idStr)) missingIds.push(idStr);
-    }
-    if (missingIds.length === 0) return;
-
-    const fetched = await Promise.all(
-      missingIds.map((id) => contractReads.getClaim(id) as Promise<Claim>),
-    );
-    setClaims((prev) => mergeClaims(fetched, prev));
   }, []);
 
   useEffect(() => {

@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { apiGet } from "@/lib/api";
-import type { BackendClaim, Claim } from "@/lib/types";
+import { env } from "@/lib/env";
+import { contractReads } from "@/lib/contract";
+import type { BackendClaim, Claim, Challenge } from "@/lib/types";
 import { mapBackendClaim } from "@/lib/types";
 import { RequireWallet } from "@/components/RequireWallet";
 import { useWallet } from "@/lib/wallet-context";
@@ -45,12 +47,43 @@ function MyCasesList() {
   const load = useCallback(async () => {
     if (!address) return;
     try {
-      const [claimedRows, challengedRows] = await Promise.all([
-        apiGet<BackendClaim[]>(`/api/v1/claims?creator=${address}&limit=50`),
-        apiGet<BackendClaim[]>(`/api/v1/claims?challenger=${address}&limit=50`),
-      ]);
-      setClaimed(claimedRows.map(mapBackendClaim));
-      setChallenged(challengedRows.map(mapBackendClaim));
+      if (env.apiBaseUrl) {
+        try {
+          const [claimedRows, challengedRows] = await Promise.all([
+            apiGet<BackendClaim[]>(`/api/v1/claims?creator=${address}&limit=50`),
+            apiGet<BackendClaim[]>(`/api/v1/claims?challenger=${address}&limit=50`),
+          ]);
+          setClaimed(claimedRows.map(mapBackendClaim));
+          setChallenged(challengedRows.map(mapBackendClaim));
+          setError(null);
+          return;
+        } catch {
+          // Backend cache unavailable, fallback to contract reads
+        }
+      }
+
+      const totalCount = await contractReads.getClaimCount();
+      const allClaims: Claim[] = [];
+      for (let id = totalCount; id >= 1; id--) {
+        try {
+          const c = (await contractReads.getClaim(String(id))) as Claim;
+          allClaims.push(c);
+        } catch {}
+      }
+
+      const myClaimed = allClaims.filter((c) => c.creator.toLowerCase() === address.toLowerCase());
+      const myChallenged: Claim[] = [];
+      for (const c of allClaims) {
+        try {
+          const ch = (await contractReads.getChallenge(c.id)) as Challenge | null;
+          if (ch && ch.challenger.toLowerCase() === address.toLowerCase()) {
+            myChallenged.push(c);
+          }
+        } catch {}
+      }
+
+      setClaimed(myClaimed);
+      setChallenged(myChallenged);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load your cases");

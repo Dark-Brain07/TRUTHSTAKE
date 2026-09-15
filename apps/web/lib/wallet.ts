@@ -4,7 +4,7 @@ import { createClient } from "genlayer-js";
 import { studionet } from "genlayer-js/chains";
 import { getAccount } from "@wagmi/core";
 import { wagmiConfig } from "./wagmi-config";
-import { getContractConfig } from "./env";
+import { getContractConfig, env } from "./env";
 
 export class NoWalletError extends Error {
   constructor() {
@@ -48,6 +48,7 @@ export async function getWalletClient(expectedAddress: `0x${string}`) {
   }
   return createClient({
     chain: studionet,
+    endpoint: env.genlayerRpcUrl || "https://studio.genlayer.com/api",
     account: expectedAddress,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     provider: provider as any,
@@ -58,5 +59,8 @@ export async function getWalletClient(expectedAddress: `0x${string}`) {
  * wallet is connected (Hunt Board, claim detail, leaderboard, etc). */
 export function getReadClient() {
   getContractConfig(); // throws early with a clear message if misconfigured
-  return createClient({ chain: studionet });
+  return createClient({
+    chain: studionet,
+    endpoint: env.genlayerRpcUrl || "https://studio.genlayer.com/api",
+  });
 }

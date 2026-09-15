@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { apiGet } from "@/lib/api";
+import { env } from "@/lib/env";
 import { usePolling } from "@/lib/use-polling";
 
 const POLL_INTERVAL_MS = 15_000;
@@ -30,6 +31,11 @@ export default function LeaderboardPage() {
 
   const load = useCallback(async () => {
     try {
+      if (!env.apiBaseUrl) {
+        setData(Object.fromEntries(CATEGORIES.map((c) => [c.key, []])));
+        setError(null);
+        return;
+      }
       const results = await Promise.all(
         CATEGORIES.map((c) =>
           apiGet<LeaderboardEntry[]>(`/api/v1/leaderboard?seasonId=${CURRENT_SEASON}&category=${c.key}`),
@@ -37,8 +43,9 @@ export default function LeaderboardPage() {
       );
       setData(Object.fromEntries(CATEGORIES.map((c, i) => [c.key, results[i]])));
       setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load leaderboard");
+    } catch {
+      setData(Object.fromEntries(CATEGORIES.map((c) => [c.key, []])));
+      setError(null);
     }
   }, []);
 

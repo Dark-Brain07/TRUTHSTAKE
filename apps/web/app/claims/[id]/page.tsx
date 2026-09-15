@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { contractReads, contractWrites } from "@/lib/contract";
 import { apiGet } from "@/lib/api";
+import { env } from "@/lib/env";
 import type {
   BackendClaim,
   Claim,
@@ -109,24 +110,25 @@ export default function ClaimDetailPage() {
    */
   const reload = useCallback(async () => {
     try {
-      const row = await apiGet<BackendClaim>(`/api/v1/claims/${claimId}`);
-      setData({
-        claim: mapBackendClaim(row),
-        versions: (row.versions ?? []).map(mapBackendClaimVersion),
-        evidence: (row.evidence ?? []).map(mapBackendEvidence),
-        challenge: row.challenge ? mapBackendChallenge(row.challenge) : null,
-        resolution: row.resolution ? mapBackendResolution(row.resolution) : null,
-        appeal: row.appeal ? mapBackendAppeal(row.appeal) : null,
-      });
-      setError(null);
-    } catch (err) {
-      if (err instanceof Error && err.message === "Claim not found") {
-        if (!triedCacheMissFallback.current) {
-          triedCacheMissFallback.current = true;
-          await reloadFromChain();
+      if (env.apiBaseUrl) {
+        try {
+          const row = await apiGet<BackendClaim>(`/api/v1/claims/${claimId}`);
+          setData({
+            claim: mapBackendClaim(row),
+            versions: (row.versions ?? []).map(mapBackendClaimVersion),
+            evidence: (row.evidence ?? []).map(mapBackendEvidence),
+            challenge: row.challenge ? mapBackendChallenge(row.challenge) : null,
+            resolution: row.resolution ? mapBackendResolution(row.resolution) : null,
+            appeal: row.appeal ? mapBackendAppeal(row.appeal) : null,
+          });
+          setError(null);
+          return;
+        } catch {
+          // Cache miss or API down, proceed to reloadFromChain
         }
-        return;
       }
+      await reloadFromChain();
+    } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load claim");
     }
   }, [claimId, reloadFromChain]);

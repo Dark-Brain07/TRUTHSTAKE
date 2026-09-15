@@ -1,10 +1,14 @@
 // Public config only — every value here is safe to ship to the browser.
 // Server-only secrets never live in this file or in any NEXT_PUBLIC_* var.
 export const env = {
-  contractAddress: process.env.NEXT_PUBLIC_TRUTHSTAKE_CONTRACT_ADDRESS ?? "",
-  genlayerRpcUrl: process.env.NEXT_PUBLIC_GENLAYER_RPC_URL ?? "",
-  apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080",
-  chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID ?? 0),
+  contractAddress:
+    process.env.NEXT_PUBLIC_TRUTHSTAKE_CONTRACT_ADDRESS ||
+    "0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3",
+  genlayerRpcUrl:
+    process.env.NEXT_PUBLIC_GENLAYER_RPC_URL ||
+    "https://studio.genlayer.com/api",
+  apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "",
+  chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID || 61999),
 };
 
 if (!env.contractAddress) {

@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { apiGet } from "@/lib/api";
+import { env } from "@/lib/env";
+import { contractReads } from "@/lib/contract";
 import { RequireWallet } from "@/components/RequireWallet";
 import { useWallet } from "@/lib/wallet-context";
 
@@ -53,20 +55,47 @@ function ProfileContent() {
 
   const load = useCallback(async () => {
     if (!address) return;
-    try {
-      const rows = await apiGet<BackendReputationEvent[]>(`/api/v1/reputation/${address}/events`);
-      setEvents(rows);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load reputation events");
+    if (env.apiBaseUrl) {
+      try {
+        const rows = await apiGet<BackendReputationEvent[]>(`/api/v1/reputation/${address}/events`);
+        setEvents(rows);
+        setError(null);
+      } catch {
+        // Fall back to on-chain read
+      }
+
+      try {
+        const cached = await apiGet<ReputationScore>(`/api/v1/reputation/${address}`);
+        setScore(cached);
+        setScoreError(null);
+      } catch {
+        // Optional score metric
+      }
     }
 
     try {
-      const cached = await apiGet<ReputationScore>(`/api/v1/reputation/${address}`);
-      setScore(cached);
-      setScoreError(null);
+      // Direct contract read fallback
+      const rawEvents = (await contractReads.getReputationEventsForUser(address)) as Array<{
+        user: string;
+        claim_id: string;
+        role: "CLAIMANT" | "CHALLENGER" | "EVIDENCE";
+        outcome: string;
+        stake_weight: string;
+        at: string;
+      }>;
+      setEvents(
+        rawEvents.map((e) => ({
+          user: e.user,
+          claimId: e.claim_id,
+          role: e.role,
+          outcome: e.outcome,
+          stakeWeight: e.stake_weight,
+          occurredAt: e.at,
+        })),
+      );
+      setError(null);
     } catch (err) {
-      setScoreError(err instanceof Error ? err.message : "Backend cache unreachable");
+      setError(err instanceof Error ? err.message : "Failed to load reputation events");
     }
   }, [address]);
 
