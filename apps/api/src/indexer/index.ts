@@ -506,7 +506,7 @@ async function syncResolution(client: ReturnType<typeof createClient>, address: 
         confidence: resolution.confidence,
         payoutBps: resolution.payout_bps,
         reasoningSummary: resolution.reasoning_summary,
-        evidenceCited: resolution.evidence_cited as unknown as Prisma.InputJsonValue,
+        evidenceCited: resolution.evidence_cited as any,
         resolvedAt: new Date(resolution.resolved_at),
         contractTxHash: "",
       },

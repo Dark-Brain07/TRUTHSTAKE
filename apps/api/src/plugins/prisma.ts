@@ -15,7 +15,7 @@ export const prismaPlugin = fp(async function prismaPluginImpl(app: FastifyInsta
   // reports that as P1017, even though a fresh connection succeeds moments
   // later. Retry that one safe-to-retry transport failure once so a browser
   // polling request does not surface an avoidable 500 to the user.
-  prisma.$use(async (params, next) => {
+  prisma.$use(async (params: any, next: any) => {
     try {
       return await next(params);
     } catch (error) {
