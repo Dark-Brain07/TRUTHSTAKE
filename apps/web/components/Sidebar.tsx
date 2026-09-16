@@ -19,8 +19,8 @@ export function Sidebar() {
     <nav className="hidden md:flex flex-col fixed left-0 top-0 h-screen z-40 py-6 w-64 bg-surface-container/95 backdrop-blur-md border-r border-outline-variant/60 shadow-xl">
       <div className="px-5 mb-6">
         <Link href="/" className="flex items-center gap-3 mb-6 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-primary-container to-secondary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
-            <span className="text-xl">⚖️</span>
+          <div className="w-10 h-10 rounded-xl bg-surface-container-highest border border-outline-variant/60 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform overflow-hidden">
+            <img src="/logo-mark.png" alt="TruthStake Logo" className="w-full h-full object-cover" />
           </div>
           <div>
             <div className="font-headline-md text-lg tracking-wider font-extrabold text-on-surface flex items-center gap-1.5">

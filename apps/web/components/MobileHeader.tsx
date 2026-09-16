@@ -13,7 +13,9 @@ export function MobileHeader() {
   return (
     <header className="fixed top-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-surface-container/95 backdrop-blur-md border-b border-outline-variant/60 md:hidden">
       <Link href="/" className="flex items-center gap-2 font-headline-md font-bold text-on-surface">
-        <span className="text-lg">⚖️</span>
+        <div className="w-8 h-8 rounded-lg overflow-hidden border border-outline-variant/60 shadow-sm flex items-center justify-center">
+          <img src="/logo-mark.png" alt="TruthStake" className="w-full h-full object-cover" />
+        </div>
         <span className="tracking-wider">TRUTH<span className="text-primary">STAKE</span></span>
       </Link>
       <button
