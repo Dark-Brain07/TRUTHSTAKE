@@ -64,6 +64,7 @@ TruthStake is an intelligent smart contract (`class TruthStake(gl.Contract)`) de
 
 ### Links
 - **Architecture & Invariant Spec:** https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/README.md
+- **Medium Technical Deep-Dive:** https://medium.com/@engraju007/introducing-truthstake-an-autonomous-adversarial-dispute-resolution-arena-powered-by-genlayer-f8db47dd33e7?sharedUserId=engraju007
 - **Security Audit & Invariant Verification:** https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/docs/audit_report.md
 - **Evidence Packet & Proof Matrix:** https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/docs/evidence-packet.md
 - **GenLayer Integration & Capability Matrix:** https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/docs/genlayer.md

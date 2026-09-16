@@ -11,6 +11,7 @@ A decentralized Web3 dispute and protocol arbitration protocol: operators interp
 - **Intelligent Contract:** [`0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3`](https://studio.genlayer.com/contract/0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3) (GenLayer StudioNet)
 - **Contract Source:** [`contracts/truthstake/contract.py`](contracts/truthstake/contract.py)
 - **Security Audit:** [`docs/audit_report.md`](docs/audit_report.md) — 100% Invariants Verified
+- **Medium Article:** [Introducing TruthStake on GenLayer](https://medium.com/@engraju007/introducing-truthstake-an-autonomous-adversarial-dispute-resolution-arena-powered-by-genlayer-f8db47dd33e7?sharedUserId=engraju007)
 
 ---
 
