@@ -106,7 +106,7 @@ TruthStake is deployed live on **GenLayer StudioNet** and hosted on **Vercel**:
 - 🌐 **Live Web Application:** [https://truthstake.vercel.app](https://truthstake.vercel.app)
 - 📜 **Smart Contract Address:** `0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3`
 - 🔍 **GenLayer Studio Explorer:** [View Contract on Explorer](https://explorer-studio.genlayer.com/address/0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3)
-- 💻 **Open-Source GitHub Repository:** [github.com/Dark-Brain07/TRUTHSTAKE](https://github.com/Dark-Brain07/TRUTHSTAKE)
+- 💻 **Open-Source GitHub Repository:** [github.com/Dark-Brain07/TRUTH-STAKE](https://github.com/Dark-Brain07/TRUTH-STAKE)
 
 ### Verified On-Chain Transactions (StudioNet)
 | Transaction Action | Transaction Hash | Explorer Link |

@@ -16,7 +16,7 @@ This document contains pre-formatted submission entries for the GenLayer Points 
 
 ### Links
 - **Live DApp:** https://truthstake.vercel.app
-- **Repository:** https://github.com/Dark-Brain07/TRUTHSTAKE
+- **Repository:** https://github.com/Dark-Brain07/TRUTH-STAKE
 - **Contract Address:** `0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3`
 - **Explorer Link:** [View on GenLayer Studio](https://explorer-studio.genlayer.com/address/0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3)
 
@@ -49,7 +49,7 @@ TruthStake is an intelligent smart contract (`class TruthStake(gl.Contract)`) de
 
 - **Contract Address:** `0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3`
 - **Explorer Link:** [View on GenLayer Studio](https://explorer-studio.genlayer.com/address/0x02e8ce1Eb09D689e51c555490BfDC6CAd922C8b3)
-- **Source Code:** [View on GitHub](https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/contracts/truthstake/contract.py)
+- **Source Code:** [View on GitHub](https://github.com/Dark-Brain07/TRUTH-STAKE/blob/main/contracts/truthstake/contract.py)
 
 ---
 
@@ -63,11 +63,11 @@ TruthStake is an intelligent smart contract (`class TruthStake(gl.Contract)`) de
 **TruthStake Architecture, Threat Model & Security Audit**
 
 ### Links
-- **Architecture & Invariant Spec:** https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/README.md
+- **Architecture & Invariant Spec:** https://github.com/Dark-Brain07/TRUTH-STAKE/blob/main/README.md
 - **Medium Technical Deep-Dive:** https://medium.com/@engraju007/introducing-truthstake-an-autonomous-adversarial-dispute-resolution-arena-powered-by-genlayer-f8db47dd33e7?sharedUserId=engraju007
-- **Security Audit & Invariant Verification:** https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/docs/audit_report.md
-- **Evidence Packet & Proof Matrix:** https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/docs/evidence-packet.md
-- **GenLayer Integration & Capability Matrix:** https://github.com/Dark-Brain07/TRUTHSTAKE/blob/main/docs/genlayer.md
+- **Security Audit & Invariant Verification:** https://github.com/Dark-Brain07/TRUTH-STAKE/blob/main/docs/audit_report.md
+- **Evidence Packet & Proof Matrix:** https://github.com/Dark-Brain07/TRUTH-STAKE/blob/main/docs/evidence-packet.md
+- **GenLayer Integration & Capability Matrix:** https://github.com/Dark-Brain07/TRUTH-STAKE/blob/main/docs/genlayer.md
 
 ### Description
 Comprehensive technical documentation, security audit, and formal analysis detailing how GenLayer's Equivalence Principle is practically applied to adversarial arbitration. Details the mathematical proofs for partial payout conservation, SSRF defense mechanics against host evasion, prompt-injection isolation techniques, and the complete step-by-step verification runbook for independent researchers.
